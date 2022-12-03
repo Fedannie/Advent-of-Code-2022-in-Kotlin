@@ -12,7 +12,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.security.MessageDigest
 
-const val SESSION_ID = "53616c7465645f5fb50a72a5c943994a874cce5b7027cfd7cf26b114d43500d1e6ab1f2880073311ba52ad79c5f8749a26ea275d21efca0257e203de7ce7246c"
+const val SESSION_ID = "null"
 
 /**
  * Reads lines from the given input txt file.
