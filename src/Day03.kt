@@ -1,28 +1,31 @@
 fun main() {
+  fun List<List<Int>>.intersection(): Int {
+    return map { it.toSet() }.reduce { a, b -> a intersect b }.sum()
+  }
+
+  fun parseInput(input: String): List<Int> {
+    return input.toCharArray().asList().map { if (it.isUpperCase()) it - 'A' + 27 else it - 'a' + 1 }
+  }
+
   fun part1(input: List<String>): Int {
     return input
-      .map { s -> s.toCharArray().asList().map { if (it.isUpperCase()) it - 'A' + 27 else it - 'a' + 1 } }
-      .map { l -> listOf(l.subList(0, l.size / 2).toSet(), l.subList(l.size / 2, l.size).toSet()) }
-      .map { p -> p[0].intersect(p[1]).sum() }
-      .sum()
+      .map(::parseInput)
+      .map { l -> l.chunked(l.size / 2) }
+      .sumOf { it.intersection() }
   }
 
   fun part2(input: List<String>): Int {
     return input
-      .map { s -> s.toCharArray().asList().map { if (it.isUpperCase()) it - 'A' + 27 else it - 'a' + 1 } }
+      .map(::parseInput)
       .chunked(3)
-      .map { l -> l.reduceRight { a, b -> a.toSet().intersect(b.toSet()).toList() }.sum() }
-      .sum()
+      .sumOf { it.intersection() }
   }
 
-  // test if implementation meets criteria from the description, like:
-  val testInput = readInput("Day03_test")
-  println(part1(testInput))
-  println(part2(testInput))
+  val testInput = readInputLines("Day03_test")
+  check(part1(testInput) == 157)
+  check(part2(testInput) == 70)
 
-  println()
-
-  val input = readInput(3)
+  val input = readInputLines(3)
   println(part1(input))
   println(part2(input))
 }

@@ -1,41 +1,17 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        var result = 0
-        var current = 0
-
-        for (i in input.indices) {
-            if (input[i].isBlank()) {
-                result = result.coerceAtLeast(current)
-                current = 0
-            } else {
-                current += Integer.parseInt(input[i])
-            }
-        }
-        return result.coerceAtLeast(current)
+    fun parseInput(input: String): List<Int> {
+        return input
+            .split("\n\n")
+            .map { it.split('\n').map { it.toInt() }.sum() }
     }
 
-    fun part2(input: List<String>): Int {
-        val calories = ArrayList<Int>(0)
+    fun part1(input: String): Int = parseInput(input).max()
 
-        var current = 0
-        for (i in input.indices) {
-            if (input[i].isBlank()) {
-                calories.add(current)
-                current = 0
-            } else {
-                current += Integer.parseInt(input[i])
-            }
-        }
-        calories.add(current)
-        return calories.sortedDescending().subList(0, 3).sum()
-    }
+    fun part2(input: String): Int = parseInput(input).sortedDescending().subList(0, 3).sum()
 
-    // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day01_test")
-    println(part1(testInput))
-    println(part2(testInput))
-
-    println()
+    check(part1(testInput) == 24000)
+    check(part2(testInput) == 45000)
 
     val input = readInput(1)
     println(part1(input))
