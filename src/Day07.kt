@@ -1,8 +1,8 @@
-fun main() {
-  val MAX_SIZE = 100000
-  val TOTAL_SIZE = 70000000
-  val FREE_SPACE = 30000000
+const val MAX_SIZE = 100000
+const val TOTAL_SIZE = 70000000
+const val FREE_SPACE = 30000000
 
+fun main() {
   fun String.isCommand(): Boolean = startsWith("$ ")
   fun String.isLs(): Boolean = startsWith("$ ls")
 
