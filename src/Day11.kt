@@ -1,6 +1,4 @@
 fun main() {
-  fun String.lastWord(): String = split(' ').last()
-
   class Algorithm(val divisibleBy: Int, val ifTrue: Int, val ifFalse: Int) {
     fun next(x: Long): Int = if (x % divisibleBy == 0L) ifTrue else ifFalse
   }
