@@ -54,6 +54,10 @@ fun String.lastWord(): String = split(' ').last()
 
 class Coordinate(val x: Int, val y: Int) {
     override fun equals(other: Any?): Boolean = other is Coordinate && other.x == x && other.y == y
+
+    override fun hashCode(): Int {
+        return (x to y).hashCode()
+    }
 }
 
 fun <T> List<List<T>>.at(coordinate: Coordinate): T = this[coordinate.x][coordinate.y]
