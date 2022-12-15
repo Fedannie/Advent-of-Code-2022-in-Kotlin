@@ -1,46 +1,40 @@
+sealed class Node: Comparable<Node>
+
+class NumberNode(val value: Int): Node() {
+  override fun compareTo(other: Node): Int {
+    return when (other) {
+      is NumberNode -> this.value.compareTo(other.value)
+      else -> ListNode(listOf(this)).compareTo(other)
+    }
+  }
+
+  override fun toString(): String {
+    return value.toString()
+  }
+}
+
+class ListNode(): Node() {
+  val values: MutableList<Node> = MutableList(0) { NumberNode(0) }
+
+  constructor(items: List<Node>): this() {
+    values.addAll(items)
+  }
+
+  override fun compareTo(other: Node): Int {
+    return when (other) {
+      is NumberNode -> this.compareTo(ListNode(listOf(other)))
+      is ListNode -> (this.values zip other.values)
+        .map { it.first.compareTo(it.second) }
+        .find { it != 0 } ?: this.values.size.compareTo(other.values.size)
+    }
+  }
+
+  override fun toString(): String {
+    return "[${values.joinToString(",")}]"
+  }
+}
+
 fun main() {
-  open class Node
-
-  class NumberNode(val value: Int): Node() {
-    override fun toString(): String {
-      return value.toString()
-    }
-  }
-
-  class ListNode(): Node() {
-    val values = MutableList(0) { Node() }
-
-    constructor(items: List<Node>): this() {
-      values.addAll(items)
-    }
-
-    override fun toString(): String {
-      return "[${values.joinToString(",")}]"
-    }
-  }
-
-  operator fun Node.compareTo(other: Node): Int {
-    return when (this) {
-      is NumberNode -> {
-        when (other) {
-          is NumberNode -> this.value.compareTo(other.value)
-          else -> ListNode(listOf(this)).compareTo(other)
-        }
-      }
-      is ListNode -> {
-        when (other) {
-          is NumberNode -> this.compareTo(ListNode(listOf(other)))
-          is ListNode -> (this.values zip other.values)
-            .map { it.first.compareTo(it.second) }
-            .find { it != 0 } ?:
-            this.values.size.compareTo(other.values.size)
-          else -> 0
-        }
-      }
-      else -> 0
-    }
-  }
-
   fun parseNode(line: List<String>, cur: Int): Pair<Node, Int> {
     if (line[cur] == "[") {
       var nextInd = cur + 1

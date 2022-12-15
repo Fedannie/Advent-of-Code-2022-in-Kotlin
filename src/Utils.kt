@@ -6,6 +6,7 @@ import java.net.CookieHandler
 import java.net.CookieManager
 import java.net.HttpCookie
 import java.net.URL
+import kotlin.math.abs
 
 const val SESSION_ID = "null"
 
@@ -57,6 +58,14 @@ class Coordinate(val x: Int, val y: Int) {
 
     override fun hashCode(): Int {
         return (x to y).hashCode()
+    }
+
+    operator fun minus(other: Coordinate): Int {
+        return abs(x - other.x) + abs(y - other.y)
+    }
+
+    override fun toString(): String {
+        return "{$x, $y}"
     }
 }
 
