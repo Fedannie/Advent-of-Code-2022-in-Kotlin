@@ -8,7 +8,7 @@ import java.net.HttpCookie
 import java.net.URL
 import kotlin.math.abs
 
-const val SESSION_ID = "53616c7465645f5fc9ed1fdc65a8daa751a5803be16585eec6da87f24ac66432a30b93257ccbe7c91ba06c96ee7395fd4288df5d369d6de2ca179a8657220511"
+const val SESSION_ID = "null"
 
 /**
  * Reads lines from the given input txt file.
