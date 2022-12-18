@@ -143,10 +143,10 @@ fun main() {
   }
 
   val testInput = readInputLines("Day16_test")
-//  check(part1(testInput) == 1651)
-//  check(part2(testInput) == 1707)
+  check(part1(testInput) == 1651)
+  check(part2(testInput) == 1707)
 
   val input = readInputLines(16)
-//  println(part1(input))
+  println(part1(input))
   println(part2(input))
 }
