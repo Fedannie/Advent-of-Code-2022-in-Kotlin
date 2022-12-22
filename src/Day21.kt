@@ -3,7 +3,6 @@ import kotlin.math.sign
 const val MY_MONKEY_NAME = "humn"
 const val ROOT = "root"
 
-val monkeys = HashMap<String, Monkey>()
 
 enum class Operation(val perform: (Double, Double) -> Double) {
   DIV(Double::div), MUL(Double::times), MINUS(Double::minus), PLUS(Double::plus);
@@ -40,16 +39,6 @@ class OpMonkey(val left: String, val right: String, val op: Operation): Monkey()
   override fun get(): Double? {
     return result
   }
-
-  override fun toString(): String {
-    if (result != null) return result.toString()
-    val builder = StringBuilder("(")
-    builder.append(monkeys[left]!!)
-    builder.append(op)
-    builder.append(monkeys[right]!!)
-    builder.append(")")
-    return builder.toString()
-  }
 }
 
 class NumMonkey(val number: Double, val isMe: Boolean = false): Monkey() {
@@ -65,22 +54,23 @@ class NumMonkey(val number: Double, val isMe: Boolean = false): Monkey() {
 }
 
 fun main() {
-  fun parseInput(input: List<String>, countMyself: Boolean = false): Monkey {
+  fun parseInput(input: List<String>, countMyself: Boolean = false): HashMap<String, Monkey> {
+    val monkeys = HashMap<String, Monkey>()
     input.map {
       val words = it.replace(":", "").split(" ")
       val from = words[0]
       if (words.size == 4) monkeys[from] = OpMonkey(words[1], words[3], if (!countMyself || words[0] != ROOT) Operation.getByString(words[2]) else Operation.MINUS)
       else monkeys[from] = NumMonkey(words[1].toDouble(), countMyself && words[0] == MY_MONKEY_NAME)
     }
-    return monkeys["root"]!!
+    return monkeys
   }
 
-  fun countValue(current: Monkey) {
+  fun countValue(current: Monkey, monkeys: HashMap<String, Monkey>) {
     if (current is NumMonkey || (current as OpMonkey).result != null) return
     val left = monkeys[current.left]!!
-    countValue(left)
+    countValue(left, monkeys)
     val right = monkeys[current.right]!!
-    countValue(right)
+    countValue(right, monkeys)
     if (left.get() == null && right.get() == null) {
       println("Logic failed...")
       return
@@ -97,10 +87,10 @@ fun main() {
   }
 
   fun part1(input: List<String>): Long {
-    monkeys.clear()
-    val root = parseInput(input)
+    val monkeys = parseInput(input)
+    val root = monkeys["root"]!!
     if (root is NumMonkey) return root.number.toLong()
-    countValue(root)
+    countValue(root, monkeys)
     return (root as OpMonkey).result?.toLong() ?: 0L
   }
 
@@ -121,10 +111,10 @@ fun main() {
   }
 
   fun part2(input: List<String>): Long {
-    monkeys.clear()
-    val root = parseInput(input, true)
+    val monkeys = parseInput(input, true)
+    val root = monkeys["root"]!!
     if (root is NumMonkey) return root.number.toLong()
-    countValue(root)
+    countValue(root, monkeys)
     return findResult(root as OpMonkey)
   }
 
